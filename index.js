@@ -12,6 +12,8 @@ exports.apiErrors = {
     MissingAuthentication     : 110,
     MissingAuthenticationDate : 111,
     MissingAuthenticationHash : 112,
+    InvalidAuthDateFormat     : 113,
+    OutOfRangeAuthDate        : 114,
     FailedAuthentication      : 115,
 
     UnknownRequestType        : 120,
