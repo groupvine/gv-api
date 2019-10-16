@@ -1,6 +1,8 @@
-const apiVersion = '1.0';
+"use strict";
 
-export const apiErrors = {
+exports.apiVersion = '1.0';
+
+exports.apiErrors = {
     // General envelope API errors
     ServerException           : 100,
     MissingMsgBody            : 101,
