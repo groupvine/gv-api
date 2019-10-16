@@ -98,7 +98,7 @@ For example (and to test an implementation), the following values
 - ISO date string: ``` 2019-10-16T14:44:38.321Z ```
 - The account API key: ``` gv10_a5b01f39478bbe9d50e54e2de79860b2 ```
 
-would result in the hash value: ``` 2419c00a9b1a6f1d746fdf1a629346322e7ada5c2e0ef14f2306dcc1b4b67392 ```;
+would result in the hash value: ``` 2419c00a9b1a6f1d746fdf1a629346322e7ada5c2e0ef14f2306dcc1b4b67392 ```
 
 
 ## Membership management
