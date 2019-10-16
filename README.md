@@ -88,17 +88,17 @@ For example, the date can be generated with the following javascript:
 and where ```hash``` is the value of a SHA256 hash on the concatenation of the
 following three values, in this order:
 
-- The account abbreviation
+- The account abbreviation, lower-cased
 - The generated ISO date string, and
 - The account API key found in your account settings
 
 For example (and to test an implementation), the following values
 
-- Account abbreviation: ```myaccount```
-- ISO date string: ```2019-10-16T06:13:47.548Z```
-- The account API key: ```gv1_18v3qbgz0v5hqff5tqc56```
+- Account abbreviation: ``` myaccount ```
+- ISO date string: ``` 2019-10-16T14:44:38.321Z ```
+- The account API key: ``` gv10_a5b01f39478bbe9d50e54e2de79860b2 ```
 
-would result in the hash value: ``` TBD ```;
+would result in the hash value: ``` 2419c00a9b1a6f1d746fdf1a629346322e7ada5c2e0ef14f2306dcc1b4b67392 ```;
 
 
 ## Membership management
