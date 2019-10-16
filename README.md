@@ -24,18 +24,18 @@ The following outlines the JSON structure of each request body:
 
 ```
 {
-  version : "1.0",  // version string
+  version   : "1.0",
 
-  request : <request type string, see types below>,
-  requestId : <optional, arbitrary client-specified string, returned in response>,
+  request   : << request type string, see types below >>,
+  requestId : << optional, arbitrary client-specified string, returned in response >>,
 
   auth : {
-    date : <ISO current date string>,
-    hash : <Authenitcation hash>
+    date : << ISO current date string >>,
+    hash : << Authenitcation hash >>
   },
 
   data : null | {
-    // request-specific data
+    << request-specific data >>
   }
 }
 ```
@@ -46,18 +46,18 @@ The following outlines the JSON structure of each response body:
 
 ```
 {
-  version : "1.0",  // version string 
+  version   : "1.0",
 
-  request : <echoed from request>,
-  requestId : <echoed from request>,
+  request   : << echoed from request >>,
+  requestId : << echoed from request >>,
 
   error : null | {
-    code : <numeric error code defined in ```index.js``` file>,
-    message : <string describing error>
+    code    : << numeric error code defined in index.js file >>,
+    message : << string describing error >>
   }
 
   data : null | {
-    // request-specific data (if no error)
+    << request-specific data (if no error) >>
   }
 }
 ```
@@ -69,8 +69,8 @@ following authentcation object:
 
 ```
   auth : {
-    date : <ISO current date string>,
-    hash : <Authenitcation hash>
+    date : << ISO current date string >>,
+    hash : << Authenitcation hash >>
   },
 ```
 
@@ -127,7 +127,7 @@ Any data in the request is ignored.  The returned data has the structure:
   ...
   data : {
     message: 'pong',
-    date: <ISO format date>
+    date: << ISO format date >>
   }
 }
 ```
