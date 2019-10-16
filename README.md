@@ -20,13 +20,13 @@ https://<account>.groupvine.com/api
 
 ### Request
 
-The following outlines the JSON structure body of each request:
+The following outlines the JSON structure of each request body:
 
 ```
 {
-  version : 1.0,
+  version : "1.0",  // version string
 
-  request : <request type>,
+  request : <request type string, see types below>,
   requestId : <optional, arbitrary client-specified string, returned in response>,
 
   auth : {
@@ -42,17 +42,17 @@ The following outlines the JSON structure body of each request:
 
 ### Response
 
-The following outlines the JSON structure body of each response:
+The following outlines the JSON structure each response body:
 
 ```
 {
-  version : 1.0,
+  version : "1.0",  // version string 
 
   request : <echoed from request>,
   requestId : <echoed from request>,
 
   error : null | {
-    code : <numeric error code from consts.js>,
+    code : <numeric error code defined in ```consts.js``` file>,
     message : <string describing error>
   }
 
@@ -114,4 +114,21 @@ Request type: ```import```
 Request type: ```export```
 
 
+## Testing
+
+### API Ping
+
+Request type: ```ping```
+
+Any data in the request is ignored.  The returned data has the structure:
+
+```
+{
+  ...
+  data : {
+    message: 'pong',
+    date: <ISO format date>
+  }
+}
+```
 
