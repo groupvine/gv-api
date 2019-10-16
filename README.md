@@ -105,20 +105,20 @@ would result in the hash value: ``` TBD ```;
 
 ### Importing membership changes
 
-*Request type: ```import```*
+**Request type: ```import```**
 
 
 
 ### Exporting membership
 
-*Request type: ```export```*
+**Request type: ```export```**
 
 
 ## Testing
 
 ### API Ping
 
-*Request type: ```ping```*
+**Request type: ```ping```**
 
 Any data in the request is ignored.  The returned data has the structure:
 
