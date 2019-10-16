@@ -1,8 +1,11 @@
 # GroupVine API
 
-The GroupVine API is used to give account owners or managers a secure,
-automated management way to manage accounts via a REST- and
-JSON-based API.
+The GroupVine API gives account owners or managers a secure,
+programatic way to manage accounts via a REST- and JSON-based API.  
+
+The API currently supports complete management of your account
+membership.
+
 
 ## API Endpoint
 
@@ -10,7 +13,7 @@ All API requests must use HTTPS and are invoked using the POST method
 on the following URL:
 
 ```
-https://<account>.groupvine.com/api
+https://<account>.groupvine.email/api
 ```
 
 (Replace ```<account>``` with the associated account abbreviation.)
@@ -30,8 +33,8 @@ The following outlines the JSON structure of each request body:
   requestId : <<optional, arbitrary client-specified string, returned in response>>,
 
   auth : {
-    date : <<ISO current date string>>,
-    hash : <<Authenitcation hash>>
+    date    : <<ISO current date string>>,
+    hash    : <<Authenitcation hash>>
   },
 
   data : null | {
@@ -68,16 +71,19 @@ As indicated in the above message envelope, each request includes the
 following authentcation object:
 
 ```
+  ...
   auth : {
     date : <<ISO current date string>>,
     hash : <<Authenitcation hash>>
   },
+  ...
 ```
 
-where ```date``` is a string representing the date and time in ISO
-format with msec resolution, like ```'2019-10-16T06:13:47.548Z```.
-Note that this date must be current for each request (as requests with
-stale dates, older than several seconds, will be rejected).
+The authentication ```date``` is a string representing the date and
+time in ISO format with msec resolution, such as
+```'2019-10-16T06:13:47.548Z```.  Note that this date must be current
+for each request (as requests with early or stale dates, by more than
+about 30 seconds, will be rejected).
 
 For example, the date can be generated with the following javascript:
 
@@ -85,12 +91,12 @@ For example, the date can be generated with the following javascript:
 (new Date()).toISOString();
 ```
 
-and where ```hash``` is the value of a SHA256 hash on the concatenation of the
-following three values, in this order:
+The authentication ```hash``` is the value of a SHA256 hash on the
+concatenation of the following three values, in this order:
 
 - The account abbreviation, lower-cased
-- The generated ISO date string, and
-- The account API key found in your account settings
+- The ISO date string used in the request, and
+- The account API key found on your Account Settings page.
 
 
 ## Membership management
