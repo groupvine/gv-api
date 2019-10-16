@@ -1,0 +1,25 @@
+{
+  "name": "gv-api",
+  "version": "1.0.0",
+  "description": "GroupVine API",
+  "scripts": {
+    "lint": "eslint *.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "exit 0",
+    "reinstall": "exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davebeyer/gv-api.git"
+  },
+  "keywords": [
+    "GroupVine",
+    "API"
+  ],
+  "author": "Dave Beyer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davebeyer/gv-api/issues"
+  },
+  "homepage": "https://github.com/davebeyer/gv-api#readme"
+}
