@@ -42,7 +42,7 @@ The following outlines the JSON structure of each request body:
 
 ### Response
 
-The following outlines the JSON structure each response body:
+The following outlines the JSON structure of each response body:
 
 ```
 {
@@ -98,27 +98,27 @@ For example (and to test an implementation), the following values
 - ISO date string: ```2019-10-16T06:13:47.548Z```
 - The account API key: ```gv1_18v3qbgz0v5hqff5tqc56```
 
-results in hash value of: ``` TBD ```;
+would result in the hash value: ``` TBD ```;
 
 
 ## Membership management
 
 ### Importing membership changes
 
-Request type: ```import```
+*Request type: ```import```*
 
 
 
 ### Exporting membership
 
-Request type: ```export```
+*Request type: ```export```*
 
 
 ## Testing
 
 ### API Ping
 
-Request type: ```ping```
+*Request type: ```ping```*
 
 Any data in the request is ignored.  The returned data has the structure:
 
