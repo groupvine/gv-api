@@ -52,7 +52,7 @@ The following outlines the JSON structure of each response body:
   requestId : <echoed from request>,
 
   error : null | {
-    code : <numeric error code defined in ```consts.js``` file>,
+    code : <numeric error code defined in ```index.js``` file>,
     message : <string describing error>
   }
 
