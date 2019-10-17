@@ -111,6 +111,53 @@ concatenation of the following three values, in this order:
 
 **Request type: ```export```**
 
+No data is required in the request object, or can be included with the
+following options:
+
+```
+    ...
+    data : {
+        inclUserIds : true | false   <<default false>>
+    }
+    ...
+```
+
+The data of the response object resembles a regular CSV membership
+export (see here for details) but has the following JSON form:
+
+
+```
+  ...
+  data : {
+    fields : {
+      attributes : {
+        standard : [
+          "email",
+          "firstName", 
+          ... <<list of standard attribute names>>
+        ],
+        custom : [
+          "city",
+          "favColor",
+          ... <<list of custom attribute names>>
+        ]
+      },
+      groupsLists : [
+        "role",
+        "staff",
+        ... <<ordered list of role, group, and list names>>
+      ],
+    } ,
+
+    members [
+      { "firstname" : "Sam",  "lastname" : "Smith", "email" : "sam.smith@example.com", ... },
+      { "firstname" : "Toni", "lastname" : "Tang",  "email" : "toni.tang@example.com", ... },
+      ...
+    ]
+  }
+  ...
+```
+
 
 ## Testing
 
