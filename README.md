@@ -144,7 +144,8 @@ export (see here for details) but has the following JSON form:
       },
       groupsLists : [
         "role",
-        "staff",
+        "list:volunteers",
+        "group:staff",
         ... <<ordered list of role, group, and list names>>
       ],
     } ,
