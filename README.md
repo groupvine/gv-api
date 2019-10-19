@@ -184,8 +184,8 @@ To then remove one of the above new members (i.e., with an empty role).
     data : {
         members : [
             {
-                "email"     : "sue.smith@example.com",
-                "role"      : ""
+                "email" : "sue.smith@example.com",
+                "role"  : ""
             }
         ]
     }
