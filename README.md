@@ -105,11 +105,113 @@ concatenation of the following three values, in this order:
 
 **Request type: ```import```**
 
+#### Import Request
+
+The data of the request object resembles a regular CSV membership
+import (see GroupVine documentation for details) but has the following
+JSON form:
+
+```
+    ...
+    data : {
+        fields: null | [
+            <<Optional ordered field list, matching column headers in a CSV import>>
+        ] 
+        members: [
+            <<List of member modifications, with objects having key-values with keys matcing the fields>>
+        ]
+    }
+```
+
+If no fields property is provided, then it will be determined from the
+keys specified in the member object list.  Note that if the account
+has sub-groups, and any sub-group related membership is being
+modified, then the fields property must be provided (as the sub-group
+and list header fields in a corresponding CSV import is order
+depdendent, see GroupVine documentation).
+
+#### Import Response
+
+The data of the response object has the following form:
+
+```
+    ...
+    data : {
+        successCount : <<number of member "rows" that were able to be processed>>
+        warnings : [
+            <<list of warning strings regarding certain member rows or settings ignored>>
+        ]
+    }
+```
+
+#### Import Examples
+
+To simply add a couple new members, along with their first and last names:
+
+
+```
+    ...
+    data : {
+        members : [
+            {
+                "email"     : "sue.smith@example.com",
+                "FirstName" : "Sue",
+                "LastName"  : "Smith"
+            },
+            {
+                "email"     : "toni.tang@example.com",
+                "FirstName" : "Toni",
+                "LastName"  : "Tang"
+            },
+       ]
+    }
+```
+
+The above member additions are equivalent to adding members with "role" property set to "x" or "Member".
+
+To then remove one of the above new members (i.e., with an empty role).
+
+```
+    ...
+    data : {
+        members : [
+            {
+                "email"     : "sue.smith@example.com",
+                "role"      : ""
+            }
+        ]
+    }
+```
+
+To add a new member with a custom attribute to a couple lists and to the "marketing" sub-group as an Editor (the 
+"fields" property is now required to give the ordering of the group and list fields, in case any of the lists
+are only defined within a particular sub-group):
+
+```
+    ...
+    data : {
+        fields  : [ "email", "FirstName", "LastName", "Company ID", "list:parttime", "list:telecommuter", "group:marketing" ],
+                     
+        members : [
+            {
+                "email"             : "Alvin.Anderson@example.com",
+                "FirstName"         : "Alvin",
+                "LastName"          : "Anderson",
+                "Company ID"        : "M12345",
+                "list:partime"      : "x",
+                "list:telecommuter" : "x",
+                "group:marketing"   : "Editor"
+            }
+       ]
+    }
+```
 
 
 ### Exporting membership
 
 **Request type: ```export```**
+
+#### Export Request
 
 No data is required in the request object, or can be included with the
 following options:
@@ -119,11 +221,13 @@ following options:
     data : {
         inclUserIds : true | false   <<default false>>
     }
-    ...
 ```
 
+#### Export Response
+
 The data of the response object resembles a regular CSV membership
-export (see here for details) but has the following JSON form:
+export (see GroupVine documentation for details) but has the following
+JSON form:
 
 
 ```
@@ -156,7 +260,6 @@ export (see here for details) but has the following JSON form:
       ...
     ]
   }
-  ...
 ```
 
 
@@ -183,7 +286,13 @@ should result in the following hash value:
 
 **Request type: ```ping```**
 
-Any data in the request is ignored.  The returned data has the structure:
+#### Ping Request
+
+Any data in the request is ignored.  
+
+#### Ping Response
+
+The response data has the structure:
 
 ```
 {
