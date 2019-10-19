@@ -16,7 +16,8 @@ exports.apiErrors = {
     NonAdvancedAuthDate       : 114,
     EarlyAuthDate             : 115,
     StaleAuthDate             : 116,
-    FailedAuthentication      : 117,
+    AccountAuthKeyIsNull      : 117,
+    FailedAuthentication      : 118,
 
     UnknownRequestType        : 120,
 
