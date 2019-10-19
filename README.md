@@ -99,6 +99,10 @@ concatenation of the following three values, in this order:
 - The account API key found on your Account Settings page.
 
 
+(Note that for managed accounts, either the API key for the specific
+account or the management account may be used.)
+
+
 ## Membership management
 
 ### Importing membership changes
