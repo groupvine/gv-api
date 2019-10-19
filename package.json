@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davebeyer/gv-api.git"
+    "url": "git+https://github.com/groupvine/gv-api.git"
   },
   "keywords": [
     "GroupVine",
@@ -19,7 +19,7 @@
   "author": "Dave Beyer",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/davebeyer/gv-api/issues"
+    "url": "https://github.com/groupvine/gv-api/issues"
   },
-  "homepage": "https://github.com/davebeyer/gv-api#readme"
+  "homepage": "https://github.com/groupvine/gv-api#readme"
 }
