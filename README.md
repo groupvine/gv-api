@@ -83,7 +83,8 @@ The authentication ```date``` is a string representing the date and
 time in ISO format with msec resolution, such as
 ```'2019-10-16T06:13:47.548Z```.  Note that this date must be current
 for each request (as requests with early or stale dates, by more than
-about 30 seconds, will be rejected).
+about 30 seconds, will be rejected), and the dates in subsequent
+requests for a given account must be increasing.
 
 For example, the date can be generated with the following javascript:
 
