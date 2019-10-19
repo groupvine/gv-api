@@ -123,7 +123,7 @@ JSON form:
             <<Optional ordered field list, matching column headers in a CSV import>>
         ] 
         members: [
-            <<List of member modifications, with objects having key-values with keys matcing the fields>>
+            <<List of member modifications, with objects having key-values with keys matching the fields>>
         ]
     }
 ```
@@ -144,7 +144,7 @@ The data of the response object has the following form:
     data : {
         successCount : <<number of member "rows" that were able to be processed>>
         warnings : [
-            <<list of warning strings regarding certain member rows or settings ignored>>
+            <<list of warning strings regarding certain member rows or settings>>
         ]
     }
 ```
@@ -172,7 +172,10 @@ To simply add a couple new members, along with their first and last names:
     }
 ```
 
-The above member additions are equivalent to adding members with "role" property set to "x" or "Member".
+The above member additions are equivalent to adding members with
+"role" property set to "x" or "Member".  I.e., if no "role" is field
+is included (either in the "fields" list or a particular member
+object), then ``` "role" : "x"``` is assumed.
 
 To then remove one of the above new members (i.e., with an empty role).
 
@@ -188,9 +191,7 @@ To then remove one of the above new members (i.e., with an empty role).
     }
 ```
 
-To add a new member with a custom attribute to a couple lists and to the "marketing" sub-group as an Editor (the 
-"fields" property is now required to give the ordering of the group and list fields, in case any of the lists
-are only defined within a particular sub-group):
+To add a new member with a custom attribute to a couple lists and to the "marketing" sub-group as an Editor:
 
 ```
     ...
@@ -211,6 +212,9 @@ are only defined within a particular sub-group):
     }
 ```
 
+(In this case, the "fields" property is required to give the ordering
+of the group and list fields, in case any of the lists are only
+defined within a particular sub-group.)
 
 ### Exporting membership
 
@@ -246,8 +250,8 @@ JSON form:
           ... <<list of standard attribute names>>
         ],
         custom : [
-          "city",
-          "favColor",
+          "City",
+          "Company ID",
           ... <<list of custom attribute names>>
         ]
       },
@@ -270,9 +274,9 @@ JSON form:
 
 ## Testing
 
-### Example Hash Computation
+### Example SHA256 Hash Computation
 
-A hash on the following values:
+A SHA256 hash on the following values:
 
 ```
     Account abbreviation:  myaccount
@@ -280,7 +284,7 @@ A hash on the following values:
     Account API key:       gv10_a5b01f39478bbe9d50e54e2de79860b2
 ```
 
-should result in the following hash value: 
+should result in the following value:
 
 ``` 
    Auth hash value:  2419c00a9b1a6f1d746fdf1a629346322e7ada5c2e0ef14f2306dcc1b4b67392 
@@ -304,7 +308,7 @@ The response data has the structure:
   ...
   data : {
     message: 'pong',
-    date: <<ISO format date>>
+    date:    <<ISO format date>>
   }
 }
 ```
