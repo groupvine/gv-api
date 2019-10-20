@@ -33,7 +33,7 @@ The following outlines the JSON structure of each request body:
   requestId : <<optional, arbitrary client-specified string, returned in response>>,
 
   auth : {
-    date    : <<ISO current date string>>,
+    date    : <<ISO current date string, e.g., 2019-10-16T14:44:38.321Z>>,
     hash    : <<Authenitcation hash>>
   },
 
@@ -73,8 +73,8 @@ following authentcation object:
 ```
   ...
   auth : {
-    date : <<ISO current date string>>,
-    hash : <<Authenitcation hash>>
+    date : <<ISO current date string, e.g., 2019-10-16T14:44:38.321Z>>,
+    hash : <<Authentication hash>>
   },
   ...
 ```
