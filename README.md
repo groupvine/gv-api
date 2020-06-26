@@ -13,7 +13,7 @@ All API requests must use HTTPS and are invoked using the POST method
 on the following URL:
 
 ```
-https://<account>.groupvine.email/api
+https://<account>.groupvine.com/api
 ```
 
 (Replace ```<account>``` with the associated account abbreviation.)
