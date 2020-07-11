@@ -313,7 +313,7 @@ The response data has the structure:
 }
 ```
 
-## apiMakeRequest() for node.js environment
+## node.js Environment
 
 In a node.js environment, the gv-api package provides the
 apiMakeRequest() convenience method that can be used to construct the
