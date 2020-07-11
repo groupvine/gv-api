@@ -1,5 +1,5 @@
 import * as sha256       from "crypto-js/sha256.js";
-import * as moment       from "moment-timezone";
+import * as moment       from "moment";
 
 import { apiVersion,
          apiErrorCodes,
@@ -80,7 +80,6 @@ export function apiIsInvalidRequest(rqstObj: any): apiError {
     //
     // Date check
     //
-
 
     let date = moment(auth.date);
 
