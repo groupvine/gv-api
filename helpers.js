@@ -2,7 +2,7 @@
 exports.__esModule = true;
 exports.apiMakeResponse = exports.apiIsInvalidRequest = exports.apiMakeRequest = exports.apiGenerateHash = void 0;
 var sha256 = require("crypto-js/sha256.js");
-var moment = require("moment-timezone");
+var moment = require("moment");
 var consts_1 = require("./consts");
 // Examples:
 //   rqstType:    'import', 'export', ...
