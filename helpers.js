@@ -61,12 +61,12 @@ function apiIsInvalidRequest(rqstObj) {
         return new consts_1.apiError(consts_1.apiErrorCodes.InvalidAuthDateFormat, "Unable to parse authentication date");
     }
     var now = moment();
-    var early = date.clone().subtract(consts_1.apiAuthTooEarly_s);
+    var early = date.clone().subtract(consts_1.apiAuthTooEarly_s, "seconds");
     // If the date plus 1 min is still before now, then it's too early
     if (now.isBefore(early)) {
         return new consts_1.apiError(consts_1.apiErrorCodes.EarlyAuthDate, "Authentication date is too early");
     }
-    var late = date.clone().add(consts_1.apiAuthTooLate_s);
+    var late = date.clone().add(consts_1.apiAuthTooLate_s, "seconds");
     // If the date minus 1 min is still after now, then it's too stale
     if (now.isAfter(late)) {
         return new consts_1.apiError(consts_1.apiErrorCodes.StaleAuthDate, "Authentication has expired");

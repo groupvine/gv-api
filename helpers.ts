@@ -91,7 +91,7 @@ export function apiIsInvalidRequest(rqstObj: any): apiError {
 
     let now = moment();
 
-    let early = date.clone().subtract(apiAuthTooEarly_s);
+    let early = date.clone().subtract(apiAuthTooEarly_s, "seconds");
 
     // If the date plus 1 min is still before now, then it's too early
     if (now.isBefore(early)) {
@@ -99,7 +99,7 @@ export function apiIsInvalidRequest(rqstObj: any): apiError {
                             "Authentication date is too early");
     }
 
-    let late = date.clone().add(apiAuthTooLate_s);
+    let late = date.clone().add(apiAuthTooLate_s, "seconds");
 
     // If the date minus 1 min is still after now, then it's too stale
     if (now.isAfter(late)) {
