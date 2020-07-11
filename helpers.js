@@ -11,10 +11,13 @@ var consts_1 = require("./consts");
 //   contextKey:  secret apiKey for this account
 //   data:        Relevant data object
 function apiGenerateHash(context, contextKey, date) {
-    return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim());
+    return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim()).toString();
 }
 exports.apiGenerateHash = apiGenerateHash;
 function apiMakeRequest(rqstType, rqstId, context, contextKey, rqstData) {
+    if (!rqstType || !context || !contextKey) {
+        throw new Error("Invalid apiMakeRequest() attempt.  rqstType, context, and contextKey all required");
+    }
     var date = (new Date()).toISOString();
     var hash = apiGenerateHash(context, contextKey, date);
     return {

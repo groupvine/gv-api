@@ -280,14 +280,14 @@ A SHA256 hash on the following values:
 
 ```
     Account abbreviation:  myaccount
-    Account API key:       gv10_a5b01f39478bbe9d50e54e2de79860b2
-    ISO date string:       
+    Account API key:       gv10_ec06a1f23832114967e1aac88594fded
+    ISO date string:       2020-07-11T01:32:56.020Z
 ```
 
 should result in the following value:
 
 ``` 
-   Auth hash value:  
+   Auth hash value:  0993a144813c3c03b50a7d750801edbb33344d92cb679b53ad9c9b654d8a891b
 ```
 
 
@@ -313,12 +313,13 @@ The response data has the structure:
 }
 ```
 
-## Convenience methods for node.js environment
+## apiMakeRequest() for node.js environment
 
 In a node.js environment, the gv-api package provides the
 apiMakeRequest() convenience method that can be used to construct the
 request object with properly computed date and authentication hash
-value.  For instance, for the "ping" example, it could be used like this:
+value.  For instance, for the "ping" request, it could be used in the
+following way.
 
 Install package:
 
@@ -331,14 +332,18 @@ Ping example:
 ```
 import { apiMakeRequest } from 'gv-api';
 
-
+// GroupVine account being managed
 let accountAbbrev = "myaccount";
-let accountApiKey = "gv10_a5b01f39478bbe9d50e54e2de79860b2";
+
+// Private API key for this account
+let accountApiKey = "gv10_ec06a1f23832114967e1aac88594fded";
+
+// No data for ping
 let data = {};
 
 let rqstObj = apiMakeRequest('ping', 'example ping', accountAbbrev, accountApiKey, data);
 ```
 
-Then the rqstObj would be sent the the GroupVine API endpoint as JSON
+Then the rqstObj would be sent to the GroupVine API endpoint as JSON
 data in an https POST request, using the node.js "request" package for
 instance.

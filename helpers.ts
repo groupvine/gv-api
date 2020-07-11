@@ -15,11 +15,15 @@ import { apiVersion,
 //   data:        Relevant data object
 
 export function apiGenerateHash (context: string, contextKey: string, date: string) {
-    return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim());
+    return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim()).toString();
 }
 
 export function apiMakeRequest(rqstType: string, rqstId: string,
                                context: string, contextKey: string, rqstData: any) {
+    if (!rqstType || !context || !contextKey) {
+        throw new Error("Invalid apiMakeRequest() attempt.  rqstType, context, and contextKey all required");
+    }
+
     let date = (new Date()).toISOString();
 
     let hash = apiGenerateHash(context, contextKey, date);
