@@ -110,7 +110,6 @@ export function apiIsInvalidRequest(rqstObj: any): apiError {
     return null;
 }
 
-
 export function apiMakeResponse(rqstType: string, rqstId: string, respData: any, errObj?: apiError) {
     return {
         version   : apiVersion,
