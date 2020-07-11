@@ -1,29 +1,14 @@
 "use strict";
-
-exports.apiVersion = '1.0';
-
-exports.apiErrors = {
-    // General envelope API errors
-    ServerException           : 100,
-    MissingMsgBody            : 101,
-    MissingAPIVersion         : 102,
-    InvalidAPIVersion         : 103,
-
-    MissingAuthentication     : 110,
-    MissingAuthenticationDate : 111,
-    MissingAuthenticationHash : 112,
-    InvalidAuthDateFormat     : 113,
-    NonAdvancedAuthDate       : 114,
-    EarlyAuthDate             : 115,
-    StaleAuthDate             : 116,
-    AccountAuthKeyIsNull      : 117,
-    FailedAuthentication      : 118,
-
-    UnknownRequestType        : 120,
-
-    // Import-specific errors
-    InvalidImportData         : 200,
-
-    // Export-specific errors
-    InvalidExportData         : 300
-}
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
+exports.__esModule = true;
+__exportStar(require("./consts"), exports);
+__exportStar(require("./helpers"), exports);

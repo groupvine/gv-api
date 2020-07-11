@@ -96,8 +96,8 @@ The authentication ```hash``` is the value of a SHA256 hash on the
 concatenation of the following three values, in this order:
 
 - The account abbreviation, lower-cased
-- The ISO date string used in the request, and
 - The account API key found on your Account Settings page.
+- The ISO date string used in the request, and
 
 
 (Note that for managed accounts, either the API key for the specific
@@ -280,14 +280,14 @@ A SHA256 hash on the following values:
 
 ```
     Account abbreviation:  myaccount
-    ISO date string:       2019-10-16T14:44:38.321Z
     Account API key:       gv10_a5b01f39478bbe9d50e54e2de79860b2
+    ISO date string:       
 ```
 
 should result in the following value:
 
 ``` 
-   Auth hash value:  2419c00a9b1a6f1d746fdf1a629346322e7ada5c2e0ef14f2306dcc1b4b67392 
+   Auth hash value:  
 ```
 
 

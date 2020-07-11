@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "GroupVine API",
   "scripts": {
-    "lint": "eslint *.js",
+    "lint": "tslint -t verbose -e './**/node_modules/**'  './**/*.ts' ; exit 0",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build:dev": "tsc *.ts",
     "build": "exit 0",
     "reinstall": "exit 0"
   },
@@ -12,6 +13,10 @@
     "type": "git",
     "url": "git+https://github.com/groupvine/gv-api.git"
   },
+  "files": [
+    "*.js",
+    "*.js.map"
+  ],
   "keywords": [
     "GroupVine",
     "API"
@@ -21,5 +26,12 @@
   "bugs": {
     "url": "https://github.com/groupvine/gv-api/issues"
   },
-  "homepage": "https://github.com/groupvine/gv-api#readme"
+  "homepage": "https://github.com/groupvine/gv-api#readme",
+  "dependencies": {
+    "crypto-js": "^3.3.0",
+    "moment-timezone": "^0.5.31"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.6"
+  }
 }
