@@ -10,6 +10,9 @@ var apiError = /** @class */ (function () {
         this.code = code;
         this.message = msg;
     }
+    apiError.prototype.toString = function () {
+        "Error code: " + this.code + "; \"" + this.message + "\"";
+    };
     return apiError;
 }());
 exports.apiError = apiError;
@@ -35,9 +38,10 @@ exports.apiErrorCodes = {
     AccountAuthKeyIsNull: 121,
     FailedAuthentication: 122,
     //
-    // API specific
+    // Generic API type and data errors
     //
     UnknownRequestType: 150,
+    InvalidRequestData: 151,
     //
     // GroupVine 3rd-party management API
     //

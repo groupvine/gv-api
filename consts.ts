@@ -12,6 +12,10 @@ export class apiError {
         this.code = code;
         this.message = msg;
     }
+
+    toString() {
+        `Error code: ${this.code}; "${this.message}"`;
+    }
 }
 /* tslint:enable */
 
@@ -40,10 +44,11 @@ export const apiErrorCodes = {
     FailedAuthentication      : 122,
 
     //
-    // API specific
+    // Generic API type and data errors
     //
 
     UnknownRequestType        : 150,
+    InvalidRequestData        : 151,
 
     //
     // GroupVine 3rd-party management API
