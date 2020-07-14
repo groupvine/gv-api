@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "tsc *.ts",
     "build": "exit 0",
-    "reinstall": "exit 0"
+    "reinstall": "rm -rf node_modules && npm install"
   },
   "repository": {
     "type": "git",
