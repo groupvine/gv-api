@@ -345,5 +345,26 @@ let rqstObj = apiMakeRequest('ping', 'example ping', accountAbbrev, accountApiKe
 ```
 
 Then the rqstObj would be sent to the GroupVine API endpoint as JSON
-data in an https POST request, using the node.js "request" package for
-instance.
+data in an https POST request.  For example, using the node.js
+"request" package:
+
+```
+const request = require('request');
+
+request({
+    url    : `https://${accountAbbrev}.groupvine.com/api`,
+    method : 'POST',
+    json   : true,
+    body   : rqstObj
+}, (err, response, body) => {
+    if (err) {
+       // Handle HTTP request error
+    } else if (body.error) {
+       // Handle API error: body.error.message, body.error.code
+    } else {
+        // Handle request response in body.data
+    }
+});
+
+```
+
