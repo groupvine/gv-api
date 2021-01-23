@@ -196,7 +196,7 @@ To add a new member with a custom attribute to a couple lists and to the "market
 ```
     ...
     data : {
-        fields  : [ "email", "FirstName", "LastName", "Company ID", "list:parttime", "list:telecommuter", "group:marketing" ],
+        fields  : [ "email", "FirstName", "LastName", "Company ID", "role", "list:parttime", "list:telecommuter", "group:marketing" ],
                      
         members : [
             {
@@ -204,6 +204,7 @@ To add a new member with a custom attribute to a couple lists and to the "market
                 "FirstName"         : "Alvin",
                 "LastName"          : "Anderson",
                 "Company ID"        : "M12345",
+                "role"              : "x",
                 "list:partime"      : "x",
                 "list:telecommuter" : "x",
                 "group:marketing"   : "Editor"
