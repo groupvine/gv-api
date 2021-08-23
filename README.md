@@ -121,10 +121,19 @@ JSON form:
     data : {
         fields: null | [
             <<Optional ordered field list, matching column headers in a CSV import>>
-        ] 
+        ],
+        
         members: [
             <<List of member modifications, with objects having key-values with keys matching the fields>>
-        ]
+        ],
+        
+        importMode: 'add' | 'modify' <<Optional, defaults to 'modify'>>,
+
+        // optional options
+        options: {
+            noDemotions  : true | false (defaults to false),
+            noPromotions : true | false (defaults to false)
+        }
     }
 ```
 
@@ -134,6 +143,8 @@ has sub-groups, and any sub-group related membership is being
 modified, then the fields property must be provided (as the sub-group
 and list header fields in a corresponding CSV import is order
 depdendent, see GroupVine documentation).
+
+
 
 #### Import Response
 
