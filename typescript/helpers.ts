@@ -1,11 +1,11 @@
 import * as sha256       from "crypto-js/sha256.js";
 import * as moment       from "moment";
 
-import { apiVersion,
-         apiErrorCodes,
-         apiAuthTooEarly_s,
-         apiAuthTooLate_s,
-         apiError } from "./consts";
+import { GvApiConstants,
+         GvApiErrorCodes,
+         GvApiRequest,
+         GvApiAuth,
+         GvApiError } from "./consts";
 
 // Examples:
 //   rqstType:    'import', 'export', ...
@@ -14,46 +14,40 @@ import { apiVersion,
 //   contextKey:  secret apiKey for this account
 //   data:        Relevant data object
 
-export function apiGenerateHash (context: string, contextKey: string, date: string) {
+export function GvApiGenerateHash (context: string, contextKey: string, date: string) {
     return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim()).toString();
 }
 
-export function apiMakeRequest(rqstType: string, rqstId: string,
+export function GvApiMakeRequest(rqstType: string, rqstId: string,
                                context: string, contextKey: string, rqstData: any) {
     if (!rqstType || !context || !contextKey) {
-        throw new Error("Invalid apiMakeRequest() attempt.  rqstType, context, and contextKey all required");
+        throw new Error("Invalid GvApiMakeRequest() attempt.  rqstType, context, and contextKey all required");
     }
 
     let date = (new Date()).toISOString();
+    let hash = GvApiGenerateHash(context, contextKey, date);
 
-    let hash = apiGenerateHash(context, contextKey, date);
-
-    return {
-        version   : apiVersion,
-
+    let resp = new GvApiRequest({
         request   : rqstType,
         requestId : rqstId,
+        auth      : new GvApiAuth(date, hash),
+        data      : rqstData
+    });
 
-        auth : {
-            date : date,
-            hash : hash
-        },
-
-        data : rqstData
-    };
+    return resp;
 }
 
-// Returns apiError object on error, else null
-export function apiIsInvalidRequest(rqstObj: any): apiError {
+// Returns GvApiError object on error, else null
+export function GvApiIsInvalidRequest(rqstObj: any): GvApiError {
 
     if (rqstObj.version == null) {
-        return new apiError(apiErrorCodes.MissingAPIVersion,
-                            "Missing API version field");
+        return new GvApiError(GvApiErrorCodes.MissingAPIVersion,
+                              "Missing API version field");
     }
 
-    if (rqstObj.version !== apiVersion) {
-        return new apiError(apiErrorCodes.InvalidAPIVersion,
-                            `API version ${rqstObj.version} is unsupported; currently on version ${apiVersion}`);
+    if (rqstObj.version !== GvApiConstants.apiVersion) {
+        return new GvApiError(GvApiErrorCodes.InvalidAPIVersion,
+                              `API version ${rqstObj.version} is unsupported; currently on version ${GvApiConstants.apiVersion}`);
     }
 
     let auth = rqstObj.auth;
@@ -63,17 +57,17 @@ export function apiIsInvalidRequest(rqstObj: any): apiError {
     //
 
     if (auth == null) {
-        return new apiError(apiErrorCodes.MissingAuthentication,
+        return new GvApiError(GvApiErrorCodes.MissingAuthentication,
                             "Missing authentication object");
     }
 
     if (auth.date == null) {
-        return new apiError(apiErrorCodes.MissingAuthenticationDate,
+        return new GvApiError(GvApiErrorCodes.MissingAuthenticationDate,
                             "Missing authentication date");
     }
 
     if (auth.hash == null) {
-        return new apiError(apiErrorCodes.MissingAuthenticationHash,
+        return new GvApiError(GvApiErrorCodes.MissingAuthenticationHash,
                             "Missing authentication hash");
     }
 
@@ -84,25 +78,25 @@ export function apiIsInvalidRequest(rqstObj: any): apiError {
     let date = moment(auth.date);
 
     if (! date.isValid()) {
-        return new apiError(apiErrorCodes.InvalidAuthDateFormat,
+        return new GvApiError(GvApiErrorCodes.InvalidAuthDateFormat,
                             "Unable to parse authentication date");
     }
 
     let now = moment();
 
-    let early = date.clone().subtract(apiAuthTooEarly_s, "seconds");
+    let early = date.clone().subtract(GvApiConstants.apiAuthTooEarly_s, "seconds");
 
     // If the date plus 1 min is still before now, then it's too early
     if (now.isBefore(early)) {
-        return new apiError(apiErrorCodes.EarlyAuthDate,
+        return new GvApiError(GvApiErrorCodes.EarlyAuthDate,
                             "Authentication date is too early");
     }
 
-    let late = date.clone().add(apiAuthTooLate_s, "seconds");
+    let late = date.clone().add(GvApiConstants.apiAuthTooLate_s, "seconds");
 
     // If the date minus 1 min is still after now, then it's too stale
     if (now.isAfter(late)) {
-        return new apiError(apiErrorCodes.StaleAuthDate,
+        return new GvApiError(GvApiErrorCodes.StaleAuthDate,
                             "Authentication has expired");
     }
 
@@ -113,9 +107,9 @@ export function apiIsInvalidRequest(rqstObj: any): apiError {
     return null;
 }
 
-export function apiMakeResponse(rqstType: string, rqstId: string, respData: any, errObj?: apiError) {
+export function GvApiMakeResponse(rqstType: string, rqstId: string, respData: any, errObj?: GvApiError) {
     return {
-        version   : apiVersion,
+        version   : GvApiConstants.apiVersion,
 
         request   : rqstType,
         requestId : rqstId,

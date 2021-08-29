@@ -1,0 +1,30 @@
+{
+  "name": "gv-api",
+  "version": "1.0.1",
+  "description": "GroupVine API Typescript files",
+  "scripts": {
+    "lint": "tslint -t verbose -e './**/node_modules/**'  './**/*.ts' ; exit 0",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:dev": "tsc *.ts",
+    "build": "exit 0",
+    "reinstall": "rm -rf node_modules && npm install"
+  },
+  "files": [
+    "*.js",
+    "*.js.map"
+  ],
+  "keywords": [
+    "GroupVine",
+    "API"
+  ],
+  "author": "Dave Beyer",
+  "license": "ISC",
+  "homepage": "https://github.com/groupvine/gv-api#readme",
+  "dependencies": {
+    "crypto-js": "^3.3.0",
+    "moment": "^2.27.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.4.5"
+  }
+}

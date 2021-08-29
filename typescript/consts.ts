@@ -1,14 +1,15 @@
-export const apiVersion = "1.0";
+export const GvApiConstants = {
+    apiVersion        : "1.0",
 
-export const apiAuthTooLate_s  = 30 * 60;  // 30 mins
-export const apiAuthTooEarly_s = apiAuthTooLate_s;
+    apiAuthTooLate_s  : 30 * 60,  // 30 mins
+    apiAuthTooEarly_s : 30 * 60
+};
 
-/* tslint:disable  (pascal case) */
-export class apiError {
+export class GvApiError {
     code: number;
     message: string;
 
-    constructor (code:number, msg:string) {
+    constructor (code: number, msg: string) {
         this.code = code;
         this.message = msg;
     }
@@ -17,9 +18,32 @@ export class apiError {
         `Error code: ${this.code}; "${this.message}"`;
     }
 }
-/* tslint:enable */
 
-export const apiErrorCodes = {
+export class GvApiAuth {
+    date: string;
+    hash: string;
+
+    constructor (date: string, hash: string) {
+        this.date = date;
+        this.hash = hash;
+    }
+}
+
+export class GvApiRequest {
+    version: string;
+    request: string;
+    requestId: string;
+
+    auth: GvApiAuth;
+    data: any;
+
+    constructor(data: Partial<GvApiRequest>) {
+        this.version = GvApiConstants.apiVersion;
+        Object.keys(data).map( x => { this[x] = data[x]; });
+    }
+}
+
+export const GvApiErrorCodes = {
     //
     // General envelope API errors
     //
