@@ -12,15 +12,16 @@ chai.use(chaiHttp);
 // Replace accountAbbrev and accountApiKey as appropriate for target account 
 //
 ////////////////////////////////////////////////////////////////////////////////
+
 const accountAbbrev = 'apitest';
 
 // Local test server
-const hostUrl       = `http://${accountAbbrev}.localhost.test:8098`;
-let   accountApiKey = 'gv10_b78a4f9c3aa1a9d2e052d648ae75b354';
+// const hostUrl       = `http://${accountAbbrev}.localhost.test:8098`;
+// let   accountApiKey = 'gv10_b78a4f9c3aa1a9d2e052d648ae75b354';
 
-// Online test server
-// const hostUrl     = `https://${accountAbbrev}.groupvine.work`;
-// let   accountApiKey = 'gv10_c45c9f58e3f388d6459f574cd74d25e1';   // test server
+// groupvine.work test server
+const hostUrl     = `https://${accountAbbrev}.groupvine.work`;
+let   accountApiKey = 'gv10_c45c9f58e3f388d6459f574cd74d25e1';   // test server
 
 // Production
 // const hostUrl     = `https://${accountAbbrev}.groupvine.com`;
