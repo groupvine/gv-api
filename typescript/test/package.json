@@ -1,0 +1,15 @@
+{
+  "name": "gv-api-typescript-test",
+  "version": "1.0.0",
+  "description": "Test for Typescript/Javascript-based API client",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "mocha": "^9.1.1"
+  }
+}
