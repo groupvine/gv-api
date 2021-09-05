@@ -138,12 +138,13 @@ JSON form:
 ```
 
 If no fields property is provided, then it will be determined from the
-keys specified in the member object list.  Note that if the account
-has sub-groups, and any sub-group related membership is being
-modified, then the fields property must be provided (as the sub-group
-and list header fields in a corresponding CSV import is order
-depdendent, see GroupVine documentation).
+keys specified in the member object list.
 
+Note that if the account has sub-groups with lists, and any sub-group
+related list membership is being modified, then the fields property
+should be provided (as the sub-group and list header fields in a
+corresponding CSV import is order depdendent, see GroupVine
+documentation).
 
 
 #### Import Response
@@ -240,7 +241,8 @@ following options:
 ```
     ...
     data : {
-        inclUserIds : true | false   <<default false>>
+        groupTags   : true | false   <<default false>>,  // export using group tag names
+        inclUserIds : true | false   <<default false>>   // include User IDs with export
     }
 ```
 
