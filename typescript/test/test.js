@@ -74,7 +74,7 @@ describe('Ping test group', () => {
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
                 assert.equal(resp.data.message, 'pong');
 
                 done();
@@ -129,7 +129,7 @@ describe('Ping test group', () => {
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
                 assert.equal(resp.data.message, 'pong');
 
                 done();
@@ -152,7 +152,7 @@ describe('Export test group', () => {
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
 
                 // Returned fields includes 'Email'
                 assert.include(resp.data.fields.attributes.standard, 'Email');
@@ -175,7 +175,7 @@ describe('Export test group', () => {
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
 
                 // Returned fields includes 'Email'
                 assert.include(resp.data.fields.attributes.standard, 'Email');
@@ -199,6 +199,35 @@ describe('Export test group', () => {
 ////////////////////////////////////////////////////////////////////////////////
 
 describe('Import/export test group', () => {
+    it('Ensure attempt to add member to invalid group fails', (done) => {
+        let data = {
+            importMode : 'modify',
+            members : [
+                {
+                    email : testUserAdr,
+                    role  : 'x',
+                    'grouptag:sub1-XYZ' : 'x'   // invalid grouptag!
+                }
+            ]
+        };
+        
+        apiRequest('import', 'Modify test 1', data, (error, resp) => {
+            if (error) {
+                done(error);
+            } else {
+                // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
+                
+                assert.isNotNull(resp.error);
+                assert.equal(resp.error.code, 
+                             gvApi.GvApiErrorCodes.InvalidImportData); 
+                assert.include(resp.error.message, 
+                               "Group tag sub1-xyz not found");
+
+                done();
+            }
+        });
+    });
+
     it('Add test member to membership (in case not present already)', (done) => {
         let data = {
             importMode : 'modify',
@@ -211,13 +240,13 @@ describe('Import/export test group', () => {
             ]
         };
         
-        apiRequest('import', 'Modify test 1', data, (error, resp) => {
+        apiRequest('import', 'Modify test 2', data, (error, resp) => {
             if (error) {
                 done(error);
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
 
                 assert.equal(resp.data.successCount, 1);
                 assert.isNull(resp.data.warnings);
@@ -228,13 +257,13 @@ describe('Import/export test group', () => {
     });
 
     it('Ensure test user is in sub-group membership', (done) => {
-        apiRequest('export', 'Modify test 2', {groupTags:true}, (error, resp) => {
+        apiRequest('export', 'Modify test 3', {groupTags:true}, (error, resp) => {
             if (error) {
                 done(error);
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
 
                 // Set global info on testMember
                 let testMember = resp.data.members.reduce( (mem, x) => {
@@ -267,13 +296,13 @@ describe('Import/export test group', () => {
             ]
         };
         
-        apiRequest('import', 'Modify test 3', data, (error, resp) => {
+        apiRequest('import', 'Modify test 4', data, (error, resp) => {
             if (error) {
                 done(error);
             } else {
-                //consoleIndent("Response: " + JSON.stringify(resp, null, 2));
+                // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
 
                 assert.equal(resp.data.successCount, 1);
                 assert.equal(resp.data.warnings.length, 1);
@@ -298,13 +327,13 @@ describe('Import/export test group', () => {
             ]
         };
         
-        apiRequest('import', 'Modify test 3', data, (error, resp) => {
+        apiRequest('import', 'Modify test 5', data, (error, resp) => {
             if (error) {
                 done(error);
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
 
                 assert.equal(resp.data.successCount, 1);
                 assert.isNull(resp.data.warnings);
@@ -316,13 +345,13 @@ describe('Import/export test group', () => {
 
 
     it('Ensure test user is not in membership', (done) => {
-        apiRequest('export', 'Modify test 4', {}, (error, resp) => {
+        apiRequest('export', 'Modify test 6', {}, (error, resp) => {
             if (error) {
                 done(error);
             } else {
                 // consoleIndent("Response: " + JSON.stringify(resp, null, 2));
 
-                assert.isNull(resp.error, null);
+                assert.isNull(resp.error);
 
                 let emailAdrs = resp.data.members.map(x => x['Email']);
                 assert.notInclude(emailAdrs, testUserAdr);
