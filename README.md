@@ -185,7 +185,7 @@ To simply add a couple new members, along with their first and last names:
 ```
 
 The above member additions are equivalent to adding members with
-"role" property set to "x" or "Member".  I.e., if no "role" is field
+"role" property set to "x" or "Member".  I.e., if no "role" field
 is included (either in the "fields" list or a particular member
 object), then ``` "role" : "x"``` is assumed.
 
@@ -202,6 +202,10 @@ To then remove one of the above new members (i.e., with an empty role).
         ]
     }
 ```
+
+Note that if the member was also in any sub-groups, those "group:xxx"
+fields with empty roles would also need to be included to remove the
+member entirely from the account.
 
 To add a new member with a custom attribute to a couple lists and to the "marketing" sub-group as an Editor:
 
