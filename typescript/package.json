@@ -5,8 +5,7 @@
   "scripts": {
     "lint": "tslint -t verbose -e './**/node_modules/**'  './**/*.ts' ; exit 0",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "tsc *.ts",
-    "build": "exit 0",
+    "build": "tsc *.ts",
     "reinstall": "rm -rf node_modules && npm install"
   },
   "files": [
