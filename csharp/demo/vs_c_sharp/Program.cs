@@ -16,11 +16,11 @@ static class GvAccountConsts
     public const string accountAbbrev = "apitest";
   
     // test server
-    public const string hostUrl       = "https://apitest.groupvine.work";
+    public const string hostUrl       = "https://apitest.groupvine.work/api";
     public const string accountApiKey = "gv10_c45c9f58e3f388d6459f574cd74d25e1"; 
 
     // Production
-    // public const string hostUrl       = "https://apitest.groupvine.com";
+    // public const string hostUrl       = "https://apitest.groupvine.com/api";
     // public const string accountApiKey = "gv10_61548fb1af2effc0ea773c959fbea888";
 }
 
@@ -33,65 +33,82 @@ public class Member
     public string itodID { get; set; }
 }
 
-public class NullData
-{
-}
+//            var member1_pre = new Member
+//            {
+//                emailAdr  = "test.member@example.com",
+//                firstName = "Bob",
+//                lastName  = "Smith",
+//                itodID    = "1234"
+//            };
+
+
+public class NullData { }
 
 
 namespace vs_c_sharp
 {
     class Program
     {
+        // Common HTTP client
+        static HttpClient httpClient;
+    
         static async Task Main( string[ ] args )
         {
-            await new Program( ).MainAsync(args);
+            httpClient = new HttpClient();
+
+            Program program = new Program();
+
+            await program.PingTest();
+            await program.PingTestError();
         }
 
-        public async Task MainAsync(string[] args)
-        { 
-            HttpClient httpClient = new HttpClient();
-
-            var member1_pre = new Member
-            {
-                emailAdr  = "test.member@example.com",
-                firstName = "Bob",
-                lastName  = "Smith",
-                itodID    = "1234"
-            };
-
-            string jsonStr = JsonSerializer.Serialize(member1_pre);
-
-            Console.WriteLine("Member1 pre: " + jsonStr);
-
-            Member member1_post = JsonSerializer.Deserialize<Member>(jsonStr);
-
-            Console.WriteLine("Member1 post: " +
-                JsonSerializer.Serialize(member1_post));
-
-            Console.WriteLine("Sample error code: " + GvApiErrorCodes.ServerException);
-
-            string hash = GvApiHelpers.generateHash("myaccount",
-                                                    "gv10_ec06a1f23832114967e1aac88594fded",
-                                                    "2020-07-11T01:32:56.020Z");
+        public async Task PingTest()
+        {
+            // Create request with an invalid API Key
+            Console.WriteLine("\nPing test 1");
             
-            Console.WriteLine("Hash result: " + hash);
-
             GvApiRequest rqst = GvApiHelpers.makeRequest("ping", "my ping test",
                                                          GvAccountConsts.accountAbbrev,
                                                          GvAccountConsts.accountApiKey,
                                                          new NullData());
             
+            HttpResponseMessage respMsg = await httpClient.PostAsJsonAsync(GvAccountConsts.hostUrl, rqst);
             
-            string rqstStr = JsonSerializer.Serialize(rqst);
-            Console.WriteLine("Request str: " + rqstStr);
-
-            string url = GvAccountConsts.hostUrl + "/api";
-
-            HttpResponseMessage resp = await httpClient.PostAsJsonAsync(url, rqst);
+            string respStr = await respMsg.Content.ReadAsStringAsync();
+            // Console.WriteLine("Response str: " + respStr);
             
-            string respStr = await resp.Content.ReadAsStringAsync();
+            GvApiResponse resp = JsonSerializer.Deserialize<GvApiResponse>(respStr);
 
-            Console.WriteLine("Response str: " + respStr);
+            if (resp.error != null) {
+                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
+            } else {
+                Console.WriteLine("  Success:  " + resp.data);
+            }
         }
+
+        public async Task PingTestError()
+        {
+            // Create request with an invalid API Key
+            Console.WriteLine("\nPing test 2 (authentication error)");
+          
+            GvApiRequest rqst = GvApiHelpers.makeRequest("ping", "my ping test",
+                                                         GvAccountConsts.accountAbbrev,
+                                                         GvAccountConsts.accountApiKey + "XYZ",  // BAD KEY
+                                                         new NullData());
+            
+            HttpResponseMessage respMsg = await httpClient.PostAsJsonAsync(GvAccountConsts.hostUrl, rqst);
+            
+            string respStr = await respMsg.Content.ReadAsStringAsync();
+            // Console.WriteLine("Response str: " + respStr);
+
+            GvApiResponse resp = JsonSerializer.Deserialize<GvApiResponse>(respStr);
+
+            if (resp.error != null) {
+                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
+            } else {
+                Console.WriteLine("  Success:  " + resp.data);
+            }
+        }
+
     }
 }

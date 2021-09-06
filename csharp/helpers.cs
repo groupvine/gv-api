@@ -8,8 +8,8 @@ public class GvApiError
     public string message  { get; }
 
     public GvApiError(int code, string message) {
-      this.code    = code;
-      this.message = message;
+        this.code    = code;
+        this.message = message;
     }
 }
 
@@ -31,12 +31,29 @@ public class GvApiRequest {
     public GvApiAuth auth { get; set; }
     public object data { get; set; }
 
-    public GvApiRequest(string rqstType, string rqstId, GvApiAuth auth, object rqstData) {
+    public GvApiRequest(string request, string requestId, GvApiAuth auth, object data) {
         this.version   = GvApiConstants.apiVersion;
-        this.request   = rqstType;
-        this.requestId = rqstId;
+        this.request   = request;
+        this.requestId = requestId;
         this.auth      = auth;
-        this.data      = rqstData;
+        this.data      = data;
+    }
+}
+
+public class GvApiResponse {
+    public string version { get; }
+    public string request { get; }
+    public string requestId { get; }
+    public GvApiError error { get; }
+
+    public object data { get; }
+
+    public GvApiResponse(string version, string request, string requestId, GvApiError error, object data) {
+        this.version   = version;
+        this.request   = request;
+        this.requestId = requestId;
+        this.error     = error;
+        this.data      = data;
     }
 }
 
