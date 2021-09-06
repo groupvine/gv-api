@@ -57,8 +57,17 @@ namespace vs_c_sharp
             Program program = new Program();
 
             await program.PingTest();
-            await program.PingTestError();
+            await program.PingTestAuthError();
+            await program.PingTestInvalidRequestError();
+
+            await program.ExportTest();
         }
+
+        //////////////////////////////////////////////////////////////////////////
+        //
+        // Ping-based tests
+        //
+        //////////////////////////////////////////////////////////////////////////
 
         public async Task<GvApiResponse> apiRequest(string rqstType, string rqstId, object data,
             string accountKey = GvAccountConsts.accountApiKey,
@@ -94,7 +103,7 @@ namespace vs_c_sharp
             }
         }
 
-        public async Task PingTestError()
+        public async Task PingTestAuthError()
         {
             // Create request with an invalid API Key
             Console.WriteLine("\nPing test 2 (expect authentication error)");
@@ -111,5 +120,39 @@ namespace vs_c_sharp
             }
         }
 
+        public async Task PingTestInvalidRequestError()
+        {
+            // Create request with an invalid request type
+            Console.WriteLine("\nPing test 3 (expect invalid request error)");
+
+            GvApiResponse resp = await this.apiRequest("ping-XYZ", "ping test 3", new object());
+
+            if (resp.error != null) {
+                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
+            } else {
+                Console.WriteLine("  Success:  " + resp.data);
+            }
+        }
+        
+        //////////////////////////////////////////////////////////////////////////
+        //
+        // Export tests
+        //
+        //////////////////////////////////////////////////////////////////////////
+
+        public async Task ExportTest()
+        {
+            // Create request with an invalid request type
+            Console.WriteLine("\nExport test 3 (expect success)");
+
+            // mess with the authentication key
+            GvApiResponse resp = await this.apiRequest("export", "export test 1", new object());
+
+            if (resp.error != null) {
+                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
+            } else {
+                Console.WriteLine("  Success:  " + resp.data);
+            }
+        }
     }
 }
