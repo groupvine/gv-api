@@ -99,6 +99,7 @@ concatenation of the following three values, in this order:
 - The account API key found on your Account Settings page.
 - The ISO date string used in the request, and
 
+The hash result should be lower-cased (see example below).
 
 (Note that for managed accounts, either the API key for the specific
 account or the management account may be used.)
