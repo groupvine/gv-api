@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.GvApiMakeRequest = exports.GvApiGenerateHash = exports.GvApiRequest = exports.GvApiAuth = exports.GvApiError = void 0;
+exports.GvApiMakeRequest = exports.GvApiGenerateHash = exports.GvApiResponse = exports.GvApiRequest = exports.GvApiAuth = exports.GvApiError = void 0;
 var sha256 = require("crypto-js/sha256.js");
 var consts_1 = require("./consts");
 // Examples:
@@ -37,6 +37,15 @@ var GvApiRequest = /** @class */ (function () {
     return GvApiRequest;
 }());
 exports.GvApiRequest = GvApiRequest;
+var GvApiResponse = /** @class */ (function () {
+    function GvApiResponse(data) {
+        var _this = this;
+        this.version = consts_1.GvApiConstants.apiVersion;
+        Object.keys(data).map(function (x) { _this[x] = data[x]; });
+    }
+    return GvApiResponse;
+}());
+exports.GvApiResponse = GvApiResponse;
 function GvApiGenerateHash(context, contextKey, date) {
     return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim()).toString();
 }
