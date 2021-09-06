@@ -48,7 +48,7 @@ function apiRequest(requestType, requestId, requestData, cb) {
             if (error) {
                 cb(error, null);
             } else {
-                let resp = JSON.parse(response.text);
+                let resp = new gvApi.GvApiResponse(JSON.parse(response.text));
                 cb(null, resp);
             }
         });
