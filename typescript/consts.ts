@@ -5,44 +5,6 @@ export const GvApiConstants = {
     apiAuthTooEarly_s : 30 * 60
 };
 
-export class GvApiError {
-    code: number;
-    message: string;
-
-    constructor (code: number, msg: string) {
-        this.code = code;
-        this.message = msg;
-    }
-
-    toString() {
-        `Error code: ${this.code}; "${this.message}"`;
-    }
-}
-
-export class GvApiAuth {
-    date: string;
-    hash: string;
-
-    constructor (date: string, hash: string) {
-        this.date = date;
-        this.hash = hash;
-    }
-}
-
-export class GvApiRequest {
-    version: string;
-    request: string;
-    requestId: string;
-
-    auth: GvApiAuth;
-    data: any;
-
-    constructor(data: Partial<GvApiRequest>) {
-        this.version = GvApiConstants.apiVersion;
-        Object.keys(data).map( x => { this[x] = data[x]; });
-    }
-}
-
 export const GvApiErrorCodes = {
     //
     // General envelope API errors

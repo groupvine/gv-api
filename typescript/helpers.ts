@@ -1,7 +1,7 @@
 import * as sha256 from "crypto-js/sha256.js";
 
-import { GvApiRequest,
-         GvApiAuth } from "./consts";
+import { GvApiConstants } from "./consts";
+
 
 // Examples:
 //   rqstType:    'import', 'export', ...
@@ -11,13 +11,51 @@ import { GvApiRequest,
 //   data:        Relevant data object
 
 
-export function GvApiGenerateHash (context: string, contextKey: string, date: string) {
+export class GvApiError {
+    code: number;
+    message: string;
+
+    constructor (code: number, msg: string) {
+        this.code = code;
+        this.message = msg;
+    }
+
+    toString() {
+        `Error code: ${this.code}; "${this.message}"`;
+    }
+}
+
+export class GvApiAuth {
+    date: string;
+    hash: string;
+
+    constructor (date: string, hash: string) {
+        this.date = date;
+        this.hash = hash;
+    }
+}
+
+export class GvApiRequest {
+    version: string;
+    request: string;
+    requestId: string;
+
+    auth: GvApiAuth;
+    data: any;
+    
+    constructor(data: Partial<GvApiRequest>) {
+        this.version = GvApiConstants.apiVersion;
+        Object.keys(data).map( x => { this[x] = data[x]; });
+    }
+}
+
+export function GvApiGenerateHash (context: string, contextKey: string, date: string) : string {
     return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim()).toString();
 }
 
 
 export function GvApiMakeRequest(rqstType: string, rqstId: string,
-                               context: string, contextKey: string, rqstData: any) {
+                                 context: string, contextKey: string, rqstData: any): GvApiRequest {
     if (!rqstType || !context || !contextKey) {
         throw new Error("Invalid GvApiMakeRequest() attempt.  rqstType, context, and contextKey all required");
     }
