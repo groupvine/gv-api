@@ -15,9 +15,9 @@ static class GvAccountConsts
 
     public const string accountAbbrev = "apitest";
   
-    // test server
+    // test server (make key non-const so we can test with invalid key)
     public const string hostUrl       = "https://apitest.groupvine.work/api";
-    public const string accountApiKey = "gv10_c45c9f58e3f388d6459f574cd74d25e1"; 
+    public const string accountApiKey = "gv10_c45c9f58e3f388d6459f574cd74d25e1";   
 
     // Production
     // public const string hostUrl       = "https://apitest.groupvine.com/api";
@@ -62,23 +62,33 @@ namespace vs_c_sharp
             await program.PingTestError();
         }
 
-        public async Task PingTest()
-        {
-            // Create request with an invalid API Key
-            Console.WriteLine("\nPing test 1");
-            
-            GvApiRequest rqst = GvApiHelpers.makeRequest("ping", "my ping test",
-                                                         GvAccountConsts.accountAbbrev,
-                                                         GvAccountConsts.accountApiKey,
-                                                         new NullData());
+        public async Task<GvApiResponse> apiRequest(string rqstType, string rqstId, object data,
+            string accountKey = GvAccountConsts.accountApiKey,
+            string accountAbbrev = GvAccountConsts.accountAbbrev)
+        {            
+            GvApiRequest rqst = GvApiHelpers.makeRequest(rqstType, rqstId, 
+                                                         accountAbbrev,
+                                                         accountKey,
+                                                         data);
             
             HttpResponseMessage respMsg = await httpClient.PostAsJsonAsync(GvAccountConsts.hostUrl, rqst);
             
             string respStr = await respMsg.Content.ReadAsStringAsync();
+            
             // Console.WriteLine("Response str: " + respStr);
             
             GvApiResponse resp = JsonSerializer.Deserialize<GvApiResponse>(respStr);
 
+            return resp;
+        }
+
+        public async Task PingTest()
+        {
+            // Create request with an invalid API Key
+            Console.WriteLine("\nPing test 1 (expect success)");
+
+            GvApiResponse resp = await this.apiRequest("ping", "ping test 1", new NullData());
+            
             if (resp.error != null) {
                 Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
             } else {
@@ -89,19 +99,12 @@ namespace vs_c_sharp
         public async Task PingTestError()
         {
             // Create request with an invalid API Key
-            Console.WriteLine("\nPing test 2 (authentication error)");
-          
-            GvApiRequest rqst = GvApiHelpers.makeRequest("ping", "my ping test",
-                                                         GvAccountConsts.accountAbbrev,
-                                                         GvAccountConsts.accountApiKey + "XYZ",  // BAD KEY
-                                                         new NullData());
-            
-            HttpResponseMessage respMsg = await httpClient.PostAsJsonAsync(GvAccountConsts.hostUrl, rqst);
-            
-            string respStr = await respMsg.Content.ReadAsStringAsync();
-            // Console.WriteLine("Response str: " + respStr);
+            Console.WriteLine("\nPing test 2 (expect authentication error)");
 
-            GvApiResponse resp = JsonSerializer.Deserialize<GvApiResponse>(respStr);
+            // mess with the authentication key
+            GvApiResponse resp = await this.apiRequest("ping", "ping test 2", new NullData(),
+                accountKey:GvAccountConsts.accountApiKey + "XYZ"
+            );
 
             if (resp.error != null) {
                 Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
