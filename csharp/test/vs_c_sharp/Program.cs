@@ -42,8 +42,6 @@ public class Member
 //            };
 
 
-public class NullData { }
-
 
 namespace vs_c_sharp
 {
@@ -87,7 +85,7 @@ namespace vs_c_sharp
             // Create request with an invalid API Key
             Console.WriteLine("\nPing test 1 (expect success)");
 
-            GvApiResponse resp = await this.apiRequest("ping", "ping test 1", new NullData());
+            GvApiResponse resp = await this.apiRequest("ping", "ping test 1", new object());
             
             if (resp.error != null) {
                 Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
@@ -102,7 +100,7 @@ namespace vs_c_sharp
             Console.WriteLine("\nPing test 2 (expect authentication error)");
 
             // mess with the authentication key
-            GvApiResponse resp = await this.apiRequest("ping", "ping test 2", new NullData(),
+            GvApiResponse resp = await this.apiRequest("ping", "ping test 2", new object(),
                 accountKey:GvAccountConsts.accountApiKey + "XYZ"
             );
 
