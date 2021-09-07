@@ -155,9 +155,18 @@ namespace vs_c_sharp
         {
             Console.WriteLine("\nModify test - Add member (expect success)");
 
+            // noDemotions option included in case this member is already present
+            // with a higher role (note that the noDemotions option won't prevent
+            // member from being removed entirely, just not demoted to a lower role)
+            var options = new Dictionary<string, bool>()
+            {
+                { "noDemotions", true }
+            };
+
             var data = new Dictionary<string, object>()
             {
                 { "importMode", "modify" },
+                { "options", options },
 
                 // List of member dicts
                 { "members", new object[]  
