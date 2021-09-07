@@ -265,13 +265,42 @@ public class GvApiExportResponseData {
           res += this.fields.ToString();
         }
 
+        string field;
+        
+        GvApiMemberAttributeList atts = this.fields.attributes;
+        string[] groupsLists = this.fields.groupsLists;
+
         if (this.members != null) {
             for (int i = 0; i < this.members.Length; i++) {
                 res += String.Format("\n  Member {0}:", i);
                 
-                foreach (KeyValuePair<string, string> kvp in this.members[i]) {
-                    res += string.Format("\n    {0:10}: {1}", kvp.Key, kvp.Value);
-                }    
+                if (atts.standard != null) {
+                    for (int j = 0; j < atts.standard.Length; j++) {
+                        field = atts.standard[j];
+                        if (this.members[i].ContainsKey(field)) {
+                            res += string.Format("\n    {0:10}: {1}",
+                                                 field, this.members[i][field]);
+                        }
+                    }
+                }
+                if (atts.custom != null) {
+                    for (int j = 0; j < atts.custom.Length; j++) {
+                        field = atts.custom[j];
+                        if (this.members[i].ContainsKey(field)) {
+                            res += string.Format("\n    {0:10}: {1}",
+                                                 field, this.members[i][field]);
+                        }
+                    }
+                }
+                if (groupsLists != null) {
+                    for (int j = 0; j < groupsLists.Length; j++) {
+                        field = groupsLists[j];
+                        if (this.members[i].ContainsKey(field)) {
+                            res += string.Format("\n    {0:10}: {1}",
+                                                 field, this.members[i][field]);
+                        }
+                    }
+                }
             }
         }
         
