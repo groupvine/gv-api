@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -84,9 +85,9 @@ public class GvApiResponse {
     public override string ToString() 
     {
         if (this.error == null) {
-            return String.Format("Success: {0}({1})", this.request, this.requestId);
+            return String.Format("Success: {0} ({1})", this.request, this.requestId);
         } else {
-            return String.Format("Error: {0}({1}) -- {2}", this.request, this.requestId, this.error);
+            return String.Format("Error: {0} ({1}) -- {2}", this.request, this.requestId, this.error);
         }
     }
 }
@@ -123,7 +124,7 @@ public class GvApiPingResponse : GvApiResponse {
     {
         string res = base.ToString();
         if (this.data != null) {
-            res = res + " -- " + this.data.ToString();
+            res += " -- " + this.data.ToString();
         }
         return res;
     }
@@ -148,11 +149,11 @@ public class GvApiImportResponseData {
         string res = String.Format("{0} import member(s) processed", this.successCount);
 
         if (this.warnings != null) {
-            res = res + String.Format("; {0} warning(s)", this.warnings.Length);
+            res += String.Format("; {0} warning(s)", this.warnings.Length);
           
             for (int i = 0; i < this.warnings.Length; i++) 
             {
-                res = res + String.Format("\n    " + this.warnings[i]);
+                res += String.Format("\n    " + this.warnings[i]);
             }
         }
         return res;
@@ -171,7 +172,127 @@ public class GvApiImportResponse : GvApiResponse {
     {
         string res = base.ToString();
         if (this.data != null) {
-            res = res + " -- " + this.data.ToString();
+            res += " -- " + this.data.ToString();
+        }
+        return res;
+    }
+}
+
+//
+// Export requests
+//
+
+public class GvApiMemberAttributeList {
+    public string[] standard { get; }
+    public string[] custom { get; }
+
+    public GvApiMemberAttributeList(string[] standard, string[] custom) {
+        this.standard = standard;
+        this.custom = custom;
+    }
+    
+    public override string ToString() 
+    {
+        string res = "";
+        if (this.standard != null) {
+            res += String.Format("  Standard Fields: {0}", String.Join(", ", this.standard));
+        }
+        if (this.custom != null) {
+            if (this.standard != null) {
+                res += "\n";
+            }
+            res += String.Format("  Custom Fields: {0}", String.Join(", ", this.custom));
+        }
+        return res;
+    }    
+}
+
+public class GvApiExportFields {
+    // Lists of standard and custom attributes currently in use
+    public GvApiMemberAttributeList attributes { get; }
+
+    // List of group and list field names (including "Role" for entire account)
+    public string[] groupsLists { get; }
+
+    public GvApiExportFields(GvApiMemberAttributeList attributes, string[] groupsLists) {
+        this.attributes = attributes;
+        this.groupsLists = groupsLists;
+    }
+
+    public override string ToString() 
+    {
+        string res = this.attributes.ToString();
+        
+        if (this.groupsLists != null && this.groupsLists.Length > 0) {
+            res += String.Format("\n  Group & list fields: {0}", String.Join(", ", this.groupsLists));
+        }
+        return res;
+    }    
+}
+
+public class GvApiMember {
+    public Dictionary<string, string> values;
+
+    public GvApiMember(Dictionary<string, string> values) {
+        this.values = values;
+    }
+
+    public override string ToString() 
+    {
+        return this.values.ToString();
+    }    
+}
+
+public class GvApiExportResponseData {
+    // Fields used for members in export
+    public GvApiExportFields fields { get; }
+
+    // Couldn't get GvApiMember to JSON-deserialize, so using basic Dictionary instead
+    // public GvApiMember[] members { get; }
+    public Dictionary<string,string>[] members { get; }
+
+    public GvApiExportResponseData(GvApiExportFields fields,
+                                   Dictionary<string,string>[] members) {
+                                   // GvApiMember[] members) {
+        this.fields = fields;
+        this.members = members;
+    }
+
+    public override string ToString() 
+    {
+        string res = "";
+        if (this.fields != null) {
+          res += this.fields.ToString();
+        }
+
+        if (this.members != null) {
+            for (int i = 0; i < this.members.Length; i++) {
+                res += String.Format("\n  Member {0}:", i);
+                
+                foreach (KeyValuePair<string, string> kvp in this.members[i]) {
+                    res += string.Format("\n    {0:10}: {1}", kvp.Key, kvp.Value);
+                }    
+            }
+        }
+        
+        return res;
+    }
+}
+
+public class GvApiExportResponse : GvApiResponse {
+    public GvApiExportResponseData data { get; }
+    
+    public GvApiExportResponse(string version, string request, string requestId, GvApiError error,
+                               GvApiExportResponseData data) : base(version, request, requestId, error) {
+        this.data = data;
+    }
+    
+    public override string ToString() 
+    {
+        string res = base.ToString();
+        if (this.data != null) {
+            res += "\n";
+            res += this.data.ToString();
         }
         return res;
     }

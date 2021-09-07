@@ -43,11 +43,12 @@ namespace vs_c_sharp
             await program.PingTest();
             await program.PingTestAuthError();
 
-            await program.ExportTest();
-
             await program.ModifyTestAddMember();
+            await program.ExportTest();
+            
             await program.ModifyTestRemoveMemberFail();
             await program.ModifyTestRemoveMember();
+            await program.ExportTest();
         }
         
         //////////////////////////////////////////////////////////////////////////
@@ -57,53 +58,43 @@ namespace vs_c_sharp
         //////////////////////////////////////////////////////////////////////////
 
         public async Task<string> apiRequest(string rqstType, string rqstId, object data,
-                                                    string accountKey = GvAccountConsts.accountApiKey,
-                                                    string accountAbbrev = GvAccountConsts.accountAbbrev)
+                                             string accountKey = GvAccountConsts.accountApiKey)
         {            
-            GvApiRequest rqst = GvApiHelpers.makeRequest(rqstType, rqstId, 
-                                                         accountAbbrev,
+            GvApiRequest rqst = GvApiHelpers.makeRequest(rqstType, rqstId,
+                                                         GvAccountConsts.accountAbbrev,
                                                          accountKey,
                                                          data);
             
             HttpResponseMessage respMsg = await httpClient.PostAsJsonAsync(GvAccountConsts.hostUrl, rqst);
             
             string respStr = await respMsg.Content.ReadAsStringAsync();
-            
+
+            // Uncomment for debugging with raw response
             // Console.WriteLine("Response str: " + respStr);
 
             return respStr;
         }
 
         public async Task<GvApiPingResponse> apiRequestPing(string rqstId, object data,
-                                                            string accountKey    = GvAccountConsts.accountApiKey,
-                                                            string accountAbbrev = GvAccountConsts.accountAbbrev)
+                                                            string accountKey    = GvAccountConsts.accountApiKey)
         {
             string respStr = await this.apiRequest("ping", rqstId, data,
-                                                   accountKey:accountKey,
-                                                   accountAbbrev:accountAbbrev);
+                                                   accountKey:accountKey);
             
             return JsonSerializer.Deserialize<GvApiPingResponse>(respStr);
         }
         
-        public async Task<GvApiResponse> apiRequestExport(string rqstId, object data,
-                                                          string accountKey    = GvAccountConsts.accountApiKey,
-                                                          string accountAbbrev = GvAccountConsts.accountAbbrev)
+        public async Task<GvApiExportResponse> apiRequestExport(string rqstId, object data)
         {
-            string respStr = await this.apiRequest("export", rqstId, data,
-                                                   accountKey:accountKey,
-                                                   accountAbbrev:accountAbbrev);
+            string respStr = await this.apiRequest("export", rqstId, data);
             
-            return JsonSerializer.Deserialize<GvApiResponse>(respStr);
+            return JsonSerializer.Deserialize<GvApiExportResponse>(respStr);
         }
 
         
-        public async Task<GvApiImportResponse> apiRequestImport(string rqstId, object data,
-                                                                string accountKey    = GvAccountConsts.accountApiKey,
-                                                                string accountAbbrev = GvAccountConsts.accountAbbrev)
+        public async Task<GvApiImportResponse> apiRequestImport(string rqstId, object data)
         {
-            string respStr = await this.apiRequest("import", rqstId, data,
-                                                   accountKey:accountKey,
-                                                   accountAbbrev:accountAbbrev);
+            string respStr = await this.apiRequest("import", rqstId, data);
             
             return JsonSerializer.Deserialize<GvApiImportResponse>(respStr);
         }
@@ -149,7 +140,7 @@ namespace vs_c_sharp
             Console.WriteLine("\nExport membership (expect success)");
 
             // mess with the authentication key
-            GvApiResponse resp = await this.apiRequestExport("export membership", new object());
+            GvApiExportResponse resp = await this.apiRequestExport("export membership", new object());
             
             Console.WriteLine(resp);
         }
@@ -230,7 +221,7 @@ namespace vs_c_sharp
                        {
                            { "email",         "csharp.test.user@example.com" },
                            { "role",          "" },
-                           // { "grouptag:sub1", "" },    // not removing from sub-group!
+                           { "grouptag:sub1", "" },    // not removing from sub-group!
                        }
                     }
                 }
