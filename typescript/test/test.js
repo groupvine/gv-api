@@ -30,7 +30,7 @@ let   accountApiKey = 'gv10_c45c9f58e3f388d6459f574cd74d25e1';   // test server
 
 const apiPath     = '/api';
 
-const testUserAdr = 'test.user@example.com';
+const testUserAdr = 'typescript.test.user@example.com';
 
 function apiRequest(requestType, requestId, requestData, cb) {
 
