@@ -2,6 +2,12 @@ using System;
 using System.Text;
 using System.Security.Cryptography;
 
+//////////////////////////////////////////////////////////////////////////
+//
+// API request types
+//
+//////////////////////////////////////////////////////////////////////////
+
 public class GvApiError
 {
     public int code { get; }
@@ -10,6 +16,11 @@ public class GvApiError
     public GvApiError(int code, string message) {
         this.code    = code;
         this.message = message;
+    }
+    
+    public override string ToString() 
+    {
+        return String.Format("[{0}] {1}", this.code, this.message);
     }
 }
 
@@ -20,6 +31,11 @@ public class GvApiAuth {
     public GvApiAuth(string date, string hash) {
       this.date = date;
       this.hash = hash;
+    }
+
+    public override string ToString() 
+    {
+        return String.Format("{0}; {1}", this.date, this.hash);
     }
 }
 
@@ -38,7 +54,19 @@ public class GvApiRequest {
         this.auth      = auth;
         this.data      = data;
     }
+
+    public override string ToString() 
+    {
+        return String.Format("version: {0} request {1} requestId {2} auth {3} data {4}",
+                             this.version, this.request, this.requestId, this.auth, this.data);
+    }
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// API response types
+//
+//////////////////////////////////////////////////////////////////////////
 
 public class GvApiResponse {
     public string version { get; }
@@ -46,16 +74,114 @@ public class GvApiResponse {
     public string requestId { get; }
     public GvApiError error { get; }
 
-    public object data { get; }
-
-    public GvApiResponse(string version, string request, string requestId, GvApiError error, object data) {
+    public GvApiResponse(string version, string request, string requestId, GvApiError error) {
         this.version   = version;
         this.request   = request;
         this.requestId = requestId;
         this.error     = error;
-        this.data      = data;
+    }
+
+    public override string ToString() 
+    {
+        if (this.error == null) {
+            return String.Format("Success: {0}({1})", this.request, this.requestId);
+        } else {
+            return String.Format("Error: {0}({1}) -- {2}", this.request, this.requestId, this.error);
+        }
     }
 }
+
+//
+// Ping requests
+//
+
+public class GvApiPingResponseData {
+    public string message { get; }
+    public string date { get; }
+
+    public GvApiPingResponseData(string message, string date)
+    {
+      this.message = message;
+      this.date = date;
+    }
+    
+    public override string ToString() 
+    {
+      return String.Format("{0}, {1}", this.message, this.date);
+    }
+}
+
+public class GvApiPingResponse : GvApiResponse {
+    public GvApiPingResponseData data { get; }
+    
+    public GvApiPingResponse(string version, string request, string requestId, GvApiError error,
+                             GvApiPingResponseData data) : base(version, request, requestId, error) {
+        this.data = data;
+    }
+
+    public override string ToString() 
+    {
+        string res = base.ToString();
+        if (this.data != null) {
+            res = res + " -- " + this.data.ToString();
+        }
+        return res;
+    }
+}
+
+//
+// Import requests
+//
+
+public class GvApiImportResponseData {
+    // number of members successfully processed (whether or not any warnings)
+    public int      successCount { get; }    
+    public string[] warnings     { get; }
+
+    public GvApiImportResponseData(int successCount, string[] warnings) {
+        this.warnings     = warnings;
+        this.successCount = successCount;
+    }
+    
+    public override string ToString() 
+    {
+        string res = String.Format("{0} import member(s) processed", this.successCount);
+
+        if (this.warnings != null) {
+            res = res + String.Format("; {0} warning(s)", this.warnings.Length);
+          
+            for (int i = 0; i < this.warnings.Length; i++) 
+            {
+                res = res + String.Format("\n    " + this.warnings[i]);
+            }
+        }
+        return res;
+    }
+}
+
+public class GvApiImportResponse : GvApiResponse {
+    public GvApiImportResponseData data { get; }
+    
+    public GvApiImportResponse(string version, string request, string requestId, GvApiError error,
+                               GvApiImportResponseData data) : base(version, request, requestId, error) {
+        this.data = data;
+    }
+    
+    public override string ToString() 
+    {
+        string res = base.ToString();
+        if (this.data != null) {
+            res = res + " -- " + this.data.ToString();
+        }
+        return res;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// API helper functions
+//
+//////////////////////////////////////////////////////////////////////////
 
 static class GvApiHelpers {
 

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
 
+using System.Collections.Generic;
+
 
 static class GvAccountConsts
 {
@@ -25,24 +27,6 @@ static class GvAccountConsts
 }
 
 
-public class Member
-{
-    public string emailAdr { get; set; }
-    public string firstName { get; set; }
-    public string lastName { get; set; }
-    public string itodID { get; set; }
-}
-
-//            var member1_pre = new Member
-//            {
-//                emailAdr  = "test.member@example.com",
-//                firstName = "Bob",
-//                lastName  = "Smith",
-//                itodID    = "1234"
-//            };
-
-
-
 namespace vs_c_sharp
 {
     class Program
@@ -58,20 +42,23 @@ namespace vs_c_sharp
 
             await program.PingTest();
             await program.PingTestAuthError();
-            await program.PingTestInvalidRequestError();
 
             await program.ExportTest();
+
+            await program.ModifyTestAddMember();
+            await program.ModifyTestRemoveMemberFail();
+            await program.ModifyTestRemoveMember();
         }
-
+        
         //////////////////////////////////////////////////////////////////////////
         //
-        // Ping-based tests
+        // API Request convenience functions
         //
         //////////////////////////////////////////////////////////////////////////
 
-        public async Task<GvApiResponse> apiRequest(string rqstType, string rqstId, object data,
-            string accountKey = GvAccountConsts.accountApiKey,
-            string accountAbbrev = GvAccountConsts.accountAbbrev)
+        public async Task<string> apiRequest(string rqstType, string rqstId, object data,
+                                                    string accountKey = GvAccountConsts.accountApiKey,
+                                                    string accountAbbrev = GvAccountConsts.accountAbbrev)
         {            
             GvApiRequest rqst = GvApiHelpers.makeRequest(rqstType, rqstId, 
                                                          accountAbbrev,
@@ -83,57 +70,73 @@ namespace vs_c_sharp
             string respStr = await respMsg.Content.ReadAsStringAsync();
             
             // Console.WriteLine("Response str: " + respStr);
-            
-            GvApiResponse resp = JsonSerializer.Deserialize<GvApiResponse>(respStr);
 
-            return resp;
+            return respStr;
         }
 
+        public async Task<GvApiPingResponse> apiRequestPing(string rqstId, object data,
+                                                            string accountKey    = GvAccountConsts.accountApiKey,
+                                                            string accountAbbrev = GvAccountConsts.accountAbbrev)
+        {
+            string respStr = await this.apiRequest("ping", rqstId, data,
+                                                   accountKey:accountKey,
+                                                   accountAbbrev:accountAbbrev);
+            
+            return JsonSerializer.Deserialize<GvApiPingResponse>(respStr);
+        }
+        
+        public async Task<GvApiResponse> apiRequestExport(string rqstId, object data,
+                                                          string accountKey    = GvAccountConsts.accountApiKey,
+                                                          string accountAbbrev = GvAccountConsts.accountAbbrev)
+        {
+            string respStr = await this.apiRequest("export", rqstId, data,
+                                                   accountKey:accountKey,
+                                                   accountAbbrev:accountAbbrev);
+            
+            return JsonSerializer.Deserialize<GvApiResponse>(respStr);
+        }
+
+        
+        public async Task<GvApiImportResponse> apiRequestImport(string rqstId, object data,
+                                                                string accountKey    = GvAccountConsts.accountApiKey,
+                                                                string accountAbbrev = GvAccountConsts.accountAbbrev)
+        {
+            string respStr = await this.apiRequest("import", rqstId, data,
+                                                   accountKey:accountKey,
+                                                   accountAbbrev:accountAbbrev);
+            
+            return JsonSerializer.Deserialize<GvApiImportResponse>(respStr);
+        }
+        
+        //////////////////////////////////////////////////////////////////////////
+        //
+        // Ping-based tests
+        //
+        //////////////////////////////////////////////////////////////////////////
+        
         public async Task PingTest()
         {
             // Create request with an invalid API Key
-            Console.WriteLine("\nPing test 1 (expect success)");
+            Console.WriteLine("\nPing test (expect success)");
 
-            GvApiResponse resp = await this.apiRequest("ping", "ping test 1", new object());
-            
-            if (resp.error != null) {
-                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
-            } else {
-                Console.WriteLine("  Success:  " + resp.data);
-            }
+            GvApiPingResponse resp = await this.apiRequestPing("ping test", new object());
+
+            Console.WriteLine(resp);
         }
 
         public async Task PingTestAuthError()
         {
             // Create request with an invalid API Key
-            Console.WriteLine("\nPing test 2 (expect authentication error)");
+            Console.WriteLine("\nPing test (expect authentication error)");
 
             // mess with the authentication key
-            GvApiResponse resp = await this.apiRequest("ping", "ping test 2", new object(),
+            GvApiPingResponse resp = await this.apiRequestPing("ping test (fail)", new object(),
                 accountKey:GvAccountConsts.accountApiKey + "XYZ"
             );
 
-            if (resp.error != null) {
-                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
-            } else {
-                Console.WriteLine("  Success:  " + resp.data);
-            }
+            Console.WriteLine(resp);
         }
 
-        public async Task PingTestInvalidRequestError()
-        {
-            // Create request with an invalid request type
-            Console.WriteLine("\nPing test 3 (expect invalid request error)");
-
-            GvApiResponse resp = await this.apiRequest("ping-XYZ", "ping test 3", new object());
-
-            if (resp.error != null) {
-                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
-            } else {
-                Console.WriteLine("  Success:  " + resp.data);
-            }
-        }
-        
         //////////////////////////////////////////////////////////////////////////
         //
         // Export tests
@@ -143,16 +146,100 @@ namespace vs_c_sharp
         public async Task ExportTest()
         {
             // Create request with an invalid request type
-            Console.WriteLine("\nExport test 3 (expect success)");
+            Console.WriteLine("\nExport membership (expect success)");
 
             // mess with the authentication key
-            GvApiResponse resp = await this.apiRequest("export", "export test 1", new object());
-
-            if (resp.error != null) {
-                Console.WriteLine("  Error [" + resp.error.code + "]: " + resp.error.message);
-            } else {
-                Console.WriteLine("  Success:  " + resp.data);
-            }
+            GvApiResponse resp = await this.apiRequestExport("export membership", new object());
+            
+            Console.WriteLine(resp);
         }
+
+        //////////////////////////////////////////////////////////////////////////
+        //
+        // Membership import/export modify tests
+        //
+        //////////////////////////////////////////////////////////////////////////
+        
+        public async Task ModifyTestAddMember()
+        {
+            Console.WriteLine("\nModify test - Add member (expect success)");
+
+            var data = new Dictionary<string, object>()
+            {
+                { "importMode", "modify" },
+
+                // List of member dicts
+                { "members", new object[]  
+                    {
+                       new Dictionary<string, string>()
+                       {
+                           { "email",         "csharp.test.user@example.com" },
+                           { "first name",    "CSharp"},
+                           { "last name",     "Test User"},
+                           { "ITOD ID",       "AB12345"},
+                           { "role",          "x" },
+                           { "grouptag:sub1", "x" },
+                       }
+                    }
+                }
+            };
+
+            GvApiImportResponse resp = await this.apiRequestImport("add member", data);
+
+            Console.WriteLine(resp);
+        }
+        
+        public async Task ModifyTestRemoveMemberFail()
+        {
+            Console.WriteLine("\nModify test - Remove member (expect warning)");
+
+            var data = new Dictionary<string, object>()
+            {
+                { "importMode", "modify" },
+
+                // List of member dicts
+                { "members", new object[]  
+                    {
+                       new Dictionary<string, string>()
+                       {
+                           { "email",         "csharp.test.user@example.com" },
+                           { "role",          "" },
+                           // { "grouptag:sub1", "" },    // not removing from sub-group!
+                       }
+                    }
+                }
+            };
+
+            GvApiImportResponse resp = await this.apiRequestImport("remove member (fail)", data);
+            
+            Console.WriteLine(resp);
+        }
+        
+        public async Task ModifyTestRemoveMember()
+        {
+            Console.WriteLine("\nModify test - Remove member (expect success)");
+
+            var data = new Dictionary<string, object>()
+            {
+                { "importMode", "modify" },
+
+                // List of member dicts
+                { "members", new object[]  
+                    {
+                       new Dictionary<string, string>()
+                       {
+                           { "email",         "csharp.test.user@example.com" },
+                           { "role",          "" },
+                           // { "grouptag:sub1", "" },    // not removing from sub-group!
+                       }
+                    }
+                }
+            };
+
+            GvApiImportResponse resp = await this.apiRequestImport("remove member", data);
+            
+            Console.WriteLine(resp);
+        }
+        
     }
 }
