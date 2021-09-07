@@ -163,6 +163,11 @@ namespace vs_c_sharp
                 { "noDemotions", true }
             };
 
+            // Note that the "grouptag:sub1" below can be any sequence of
+            // characters (for easy reference in the API client system) but 
+            // must match the tag assigned to the sub-group in the GroupVine
+            // system.
+            
             var data = new Dictionary<string, object>()
             {
                 { "importMode", "modify" },
