@@ -21,7 +21,7 @@
   "homepage": "https://github.com/groupvine/gv-api#readme",
   "dependencies": {
     "crypto-js": "^3.3.0",
-    "moment": "^2.27.0"
+    "moment": "^2.29.3"
   },
   "devDependencies": {
     "typescript": "^3.4.5"
