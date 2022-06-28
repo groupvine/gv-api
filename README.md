@@ -128,8 +128,7 @@ JSON form:
             <<List of member modifications, with objects having key-values with keys matching the fields>>
         ],
         
-        importMode: 'add' | 'modify' <<Optional, defaults to 'modify'>>,
-
+        importMode: 'add' | 'modify' | 'refresh' <<Optional, defaults to 'modify'>>,
         // optional options
         options: {
             noDemotions  : true | false (defaults to false),
@@ -146,6 +145,12 @@ related list membership is being modified, then the fields property
 should be provided (as the sub-group and list header fields in a
 corresponding CSV import is order depdendent, see GroupVine
 documentation).
+
+Note that a 'refresh' import behaves like a 'modify' import to update
+the membership of any member listed in the 'members' array, except
+that any member NOT listed is removed from the account.  (To avoid
+certain fixed members being modified or removed, you can "lock" their
+membership if this feature is available for the account.)
 
 
 #### Import Response
