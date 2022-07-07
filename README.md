@@ -251,8 +251,13 @@ following options:
 ```
     ...
     data : {
-        groupTags   : true | false   <<default false>>,  // export using group tag names
-        inclUserIds : true | false   <<default false>>   // include User IDs with export
+        groupTags   : true | false   <<default false>>,   // export using group tag names
+        inclUserIds : true | false   <<default false>>,   // include User IDs with export
+        members     : [              <<default null to export all members>>
+           // only export these listed members
+           { email : "Alvin.Anderson@example.com" },
+           { email : "sue.smith@example.com" }
+        }
     }
 ```
 
