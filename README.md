@@ -257,7 +257,7 @@ following options:
            // only export these listed members
            { email : "Alvin.Anderson@example.com" },
            { email : "sue.smith@example.com" }
-        }
+        ]
     }
 ```
 
