@@ -132,7 +132,8 @@ JSON form:
         // optional options
         options: {
             noDemotions  : true | false (defaults to false),
-            noPromotions : true | false (defaults to false)
+            noPromotions : true | false (defaults to false),
+            errorsTo : <comma separated list of email addresses when errors occur>
         }
     }
 ```
