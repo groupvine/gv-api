@@ -12,8 +12,8 @@
     "url": "git+https://github.com/groupvine/gv-api.git"
   },
   "files": [
-    "*.js",
-    "*.js.map"
+    "**/*.js",
+    "**/*.js.map"
   ],
   "keywords": [
     "GroupVine",
