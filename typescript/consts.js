@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.GvApiErrorCodes = exports.GvApiConstants = void 0;
 exports.GvApiConstants = {
     apiVersion: "1.0",

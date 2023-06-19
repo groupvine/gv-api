@@ -42,7 +42,7 @@ export class GvApiRequest {
 
     auth: GvApiAuth;
     data: any;
-    
+
     constructor(data: Partial<GvApiRequest>) {
         this.version = GvApiConstants.apiVersion;
         Object.keys(data).map( x => { this[x] = data[x]; });
@@ -56,14 +56,14 @@ export class GvApiResponse {
 
     error: GvApiError;
     data: any;
-    
+
     constructor(data: Partial<GvApiResponse>) {
         this.version = GvApiConstants.apiVersion;
         Object.keys(data).map( x => { this[x] = data[x]; });
     }
 }
 
-export function GvApiGenerateHash (context: string, contextKey: string, date: string) : string {
+export function GvApiGenerateHash (context: string, contextKey: string, date: string): string {
     return sha256(context.trim().toLowerCase() + contextKey.trim() + date.trim()).toString();
 }
 

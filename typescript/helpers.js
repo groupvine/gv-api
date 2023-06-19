@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.GvApiMakeRequest = exports.GvApiGenerateHash = exports.GvApiResponse = exports.GvApiRequest = exports.GvApiAuth = exports.GvApiError = void 0;
 var sha256 = require("crypto-js/sha256.js");
 var consts_1 = require("./consts");
@@ -15,7 +15,7 @@ var GvApiError = /** @class */ (function () {
         this.message = msg;
     }
     GvApiError.prototype.toString = function () {
-        "Error code: " + this.code + "; \"" + this.message + "\"";
+        "Error code: ".concat(this.code, "; \"").concat(this.message, "\"");
     };
     return GvApiError;
 }());
