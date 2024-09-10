@@ -7,6 +7,8 @@ exports.GvApiConstants = {
     apiAuthTooEarly_s: 30 * 60
 };
 exports.GvApiErrorCodes = {
+    // Basic
+    ApiNotEnabled: 99,
     //
     // General envelope API errors
     //

@@ -6,6 +6,9 @@ export const GvApiConstants = {
 };
 
 export const GvApiErrorCodes = {
+    // Basic
+    ApiNotEnabled             : 99,
+    
     //
     // General envelope API errors
     //
@@ -14,6 +17,7 @@ export const GvApiErrorCodes = {
     MissingMsgBody            : 101,
     MissingAPIVersion         : 102,
     InvalidAPIVersion         : 103,
+
     MissingAuthentication     : 110,
     MissingAuthenticationDate : 111,
     MissingAuthenticationHash : 112,
